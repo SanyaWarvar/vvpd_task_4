@@ -1,4 +1,6 @@
 from math import ceil
+
+
 def check_int(*verifiable):
     try:
         for i in verifiable:
@@ -102,5 +104,6 @@ def main():
         menu_commands[int(choice)][1](int(choice))
 
 
-
-main()
+if __name__ == '__main__':
+    main()
+    
