@@ -14,7 +14,7 @@ def check_pos(*args):
 
     nums = range(1, 9)
     for i in args:
-        if (args[0] and args[1]) in nums:
+        if (i[0] and i[1]) in nums:
             return True
         else:
             return False
@@ -106,4 +106,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
