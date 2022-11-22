@@ -1,4 +1,4 @@
-
+from math import ceil
 def check_int(*verifiable):
     try:
         for i in verifiable:
@@ -6,6 +6,16 @@ def check_int(*verifiable):
         return True
     except ValueError:
         return False
+
+
+def check_pos(*args):
+
+    nums = range(1, 9)
+    for i in args:
+        if (args[0] and args[1]) in nums:
+            return True
+        else:
+            return False
 
 
 def variable_cells(x, y):
@@ -24,31 +34,44 @@ def variable_cells(x, y):
     variable_2 = variable.copy()
 
     for i in variable:
-        if not(8 >= i[0] >= 1) or not(8 >= i[1] >= 1):
+        if not check_pos(*i):
             variable_2.remove(i)
 
     return variable_2
 
 
-def meeting():
-    pass
+def enter_position(option):
+    if option == 1:
+        start = input("Стартовая позиция коня: ").split()
+        end = input("Конечная позиция коня: ").split()
+    else:
+        start = input("Позиция первого коня: ").split()
+        end = input("Позиция второго коня: ").split()
 
-def turns_num():
-    start = input("Стартовая позиция коня: ").split()
-    end = input("Конечная позиция коня: ").split()
+    if not check_int(*start, *end) and check_pos(start, end) and len(start) == 2 and len(end) == 2:
+        print("Неверные координаты!")
+        return
+
     start = tuple(map(int, start))
     end = tuple(map(int, end))
-    answer = variable_cells(*start)
-    
-    new_answer = list()
-    flag = True
+
+    ans = turns_num(start, end)
+
+    if option == 1:
+        print(f"Чтобы попасть в клетку {end} коню необходимо {ans} ходов")
+    else:
+        print(f"Кони встретятся через {ceil(ans/2)} ходов")
+
+
+def turns_num(pos1, pos2):
+
+    answer = variable_cells(*pos1)
     k = 1
 
-    while flag:
+    while True:
         new_answer = answer.copy()
-        if end in new_answer:
-            print(f"Чтобы попасть в клетку {end} необходимов {k} ходов")
-            flag = False
+        if pos2 in new_answer:
+            return k
 
         answer = []
 
@@ -63,8 +86,8 @@ def turns_num():
 def main():
     menu_commands = (
         ("Выход", exit),
-        ("Количество ходов до клетки", turns_num),
-        ("Через сколько ходов встретятся кони", meeting)
+        ("Количество ходов до клетки", enter_position),
+        ("Через сколько ходов встретятся кони", enter_position)
     )
     s = ""
     for n, v in enumerate(menu_commands):
@@ -76,7 +99,7 @@ def main():
             print("Неверный ввод!")
             continue
         print("-" * 50)
-        menu_commands[int(choice)][1]()
+        menu_commands[int(choice)][1](int(choice))
 
 
 
