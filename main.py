@@ -2,7 +2,6 @@ from math import ceil
 import tkinter as tk
 
 
-
 def check_int(*verifiable):
     try:
         for i in verifiable:
@@ -23,6 +22,15 @@ def check_pos(*args):
 
 
 def variable_cells(x, y):
+    """Поиск возможных ходов коня
+
+    Находит все возможные ходы из заданной позиции
+    :param x: позиция по горизонтали
+    :param y: позиция по вертикали
+    :return: Кортеж с вложенными кортежами в каждом из которых пара координат
+    """
+
+    "наверное можно попробовать оптимизировать как то"
     variable = list()
 
     variable.append((x + 2, y + 1))
@@ -68,7 +76,16 @@ def enter_position(option):
 
 
 def turns_num(pos1, pos2):
+    """
 
+    :param pos1:
+    :param pos2:
+    :return:
+    """
+
+    """Наверное, можно сделать какой-то хитрый алгоритм. 
+    Впринципе у меня есть пара идей, но их сложно изложить и нужны ли они
+    """
     answer = variable_cells(*pos1)
     k = 1
 
@@ -106,6 +123,13 @@ def main():
         menu_commands[int(choice)][1](int(choice))
 
 
+'''вложенные функции стоило бы убрать и сделать отдельными, 
+но придется передавать слишком много параметров в таком случае
+можно передевать все параметры одним массивом, но мне лень что то делать
+
+фронтенд ужасно сделан так то, можно переделать, но нужно ли?'''
+
+
 def create_window():
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
@@ -117,10 +141,10 @@ def create_window():
 
             last_x, last_y = pressed_cells[0]
             if (last_x + last_y) % 2:
-                color = "#FFDAB9"
+                clr = "#FFDAB9"
             else:
-                color = "#800000"
-            btns[8 - last_x][last_y].configure(bg=color)
+                clr = "#800000"
+            btns[8 - last_x][last_y].configure(bg=clr)
             btns[8 - last_x][last_y].pack()
             pressed_cells[0] = pressed_cells[1]
             pressed_cells[1] = (x, y)
@@ -148,16 +172,19 @@ def create_window():
         output.configure(bg="LightGreen", text=f"Чтобы кони встретились необходимо: {ceil(k/2)} ходов")
         output.pack()
 
-
     pressed_cells = list()
 
     root = tk.Tk()
 
     choice_buttons = tk.Frame(master=root)
 
-    task1 = tk.Button(master=choice_buttons, text="Количество ходов до клетки", command=lambda : task1_func())
-    task2 = tk.Button(master=choice_buttons, text="Через сколько ходов встретятся кони", command=lambda : task2_func())
-    output = tk.Label(master=choice_buttons, bg='LightGreen', text="Для начала выберите две клетки, а потом нажмите на одну из кнопку слева", width=60)
+    task1 = tk.Button(master=choice_buttons, text="Количество ходов до клетки", command=lambda: task1_func())
+    task2 = tk.Button(master=choice_buttons, text="Через сколько ходов встретятся кони", command=lambda: task2_func())
+
+    output = tk.Label(
+        master=choice_buttons, bg='LightGreen',
+        text="Для начала выберите две клетки, а потом нажмите на одну из кнопку слева", width=60
+    )
 
     task1.pack(side='left')
     task2.pack(side='left')
@@ -167,34 +194,34 @@ def create_window():
 
     board = tk.Frame(master=root)
     btns = list()
-    for x in range(1, 9):
+
+    for y in range(1, 9):
         lines = list()
         line = tk.Frame(master=board)
-        tk.Label(master=line, bg='#C0C0C0', width=5, height=2, text=str(9 - x)).pack(side='left')
+        tk.Label(master=line, bg='#C0C0C0', width=5, height=2, text=str(9 - y)).pack(side='left')
 
-        for y in range(1, 9):
-            if (x + y) % 2:
+        for x in range(1, 9):
+            if (y + x) % 2:
                 color = "#FFDAB9"
             else:
                 color = "#800000"
 
-            lines.append(tk.Button(master=line, width=5, height=2, bg=color, command=lambda p1=9-x, p2=y - 1: press(p1, p2)))
+            lines.append(tk.Button(
+                master=line, width=5, height=2, bg=color, command=lambda p1=9-y, p2=x - 1: press(p1, p2)
+            ))
 
             lines[-1].pack(side="left")
 
         btns.append(lines)
         line.pack(side="top")
 
-
-
-
-
-
+    let = tk.Frame(master=board)
+    tk.Label(master=let, width=5, height=2).pack(side='left')
+    for i in letters:
+        tk.Label(master=let, bg='#C0C0C0', width=5, height=2, text=i).pack(side='left', ipadx=2)
+    let.pack()
 
     board.pack()
-
-
-
 
     root.mainloop()
 
