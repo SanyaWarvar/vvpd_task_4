@@ -4,7 +4,7 @@ import tkinter as tk
 
 def check_int(*args):
     """Проверка на то, состоит ли стркоа только из чисел
-
+    asdsadsadsadsadsadsadsadasd
     :param args: проверяемые числа
     :type args: str
     :return: True, если строка состоит только из чисел.
